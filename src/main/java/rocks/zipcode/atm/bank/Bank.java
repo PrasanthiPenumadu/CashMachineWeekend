@@ -27,6 +27,32 @@ public class Bank {
 
     }
 
+    public ActionResult<AccountData> addNewAccount(int id, String accountType, String name, String email, double balance){
+        Account account = accounts.get(id);
+
+        if(account==null) {
+            return ActionResult.success(this.addAccount(id, accountType, name, email, balance));
+        } else {
+            String acctListPrompt = getAcctListPrompt();
+            return ActionResult.fail("Unable to create account, ID " + id + " associated with existing account.\n" +
+                    "Please try again with an ID other than "+acctListPrompt);
+        }
+    }
+
+    private AccountData addAccount(int id, String accountType, String name, String email, double balance){
+        switch (accountType){
+            case "Premium":{
+                accounts.put(id, new PremiumAccount(new AccountData(id,name,email,balance)));
+                break;
+            }
+            default: {
+                accounts.put(id, new BasicAccount(new AccountData(id,name,email,balance)));
+                break;
+            }
+        }
+        return accounts.get(id).getAccountData();
+    }
+
     public ActionResult<AccountData> getAccountById(int id) {
         Account account = accounts.get(id);
 
