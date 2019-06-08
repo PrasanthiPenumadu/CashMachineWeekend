@@ -1,5 +1,6 @@
 package rocks.zipcode.atm;
 
+import javafx.scene.Node;
 import rocks.zipcode.atm.bank.Bank;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -20,20 +21,16 @@ public class CashMachineApp extends Application {
     private CashMachine cashMachine = new CashMachine(new Bank());
 
     private Parent createContent() {
+
+        FlowPane flowpane = new FlowPane();
         VBox vbox = new VBox(10);
         vbox.setPrefSize(600, 600);
 
         TextArea areaInfo = new TextArea();
 
-        Button btnSubmit = new Button("Set Account ID");
-        btnSubmit.setOnAction(e -> {
-            int id = Integer.parseInt(field.getText());
-            cashMachine.login(id);
-
-            areaInfo.setText(cashMachine.toString());
-        });
 
         Button btnDeposit = new Button("Deposit");
+        btnDeposit.setVisible(false);
         btnDeposit.setOnAction(e -> {
             double amount = Double.parseDouble(field.getText());
             cashMachine.deposit(amount);
@@ -42,6 +39,7 @@ public class CashMachineApp extends Application {
         });
 
         Button btnWithdraw = new Button("Withdraw");
+        btnWithdraw.setVisible(false);
         btnWithdraw.setOnAction(e -> {
             double amount = Double.parseDouble(field.getText());
             cashMachine.withdraw(amount);
@@ -50,13 +48,24 @@ public class CashMachineApp extends Application {
         });
 
         Button btnExit = new Button("Exit");
+        btnExit.setVisible(false);
         btnExit.setOnAction(e -> {
             cashMachine.exit();
-
+            Node[] toHide={btnExit,btnWithdraw,btnDeposit};
+            setVisibleOnExit(toHide);
             areaInfo.setText(cashMachine.toString());
         });
 
-        FlowPane flowpane = new FlowPane();
+
+        Button btnSubmit = new Button("Set Account ID");
+        btnSubmit.setOnAction(e -> {
+            int id = Integer.parseInt(field.getText());
+            cashMachine.login(id);
+            Node[] toShow = {btnExit,btnDeposit,btnWithdraw};
+            setVisibleOnLogin(toShow);
+            areaInfo.setText(cashMachine.toString());
+        });
+
 
         flowpane.getChildren().add(btnSubmit);
         flowpane.getChildren().add(btnDeposit);
@@ -64,6 +73,20 @@ public class CashMachineApp extends Application {
         flowpane.getChildren().add(btnExit);
         vbox.getChildren().addAll(field, flowpane, areaInfo);
         return vbox;
+    }
+
+    public void setVisibleOnLogin(Node[] args){
+        if(cashMachine.isAccountData()) {
+            for (Node node:args) {
+                node.setVisible(true);
+            }
+        }
+    }
+
+    public void setVisibleOnExit(Node[] args){
+        for (Node node:args) {
+            node.setVisible(false);
+        }
     }
 
     @Override

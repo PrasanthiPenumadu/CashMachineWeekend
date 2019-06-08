@@ -53,6 +53,10 @@ public class CashMachine {
         }
     }
 
+    public Boolean isAccountData(){
+        return accountData!=null;
+    }
+
     @Override
     public String toString() {
         return accountData != null ? accountData.toString() : "Try account 1000 or 2000 and click submit.";
