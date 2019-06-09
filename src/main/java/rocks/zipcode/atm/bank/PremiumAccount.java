@@ -9,6 +9,7 @@ public class PremiumAccount extends Account {
 
     public PremiumAccount(AccountData accountData) {
         super(accountData);
+        accountData.setAccountType("Premium");
     }
 
     @Override

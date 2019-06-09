@@ -11,11 +11,14 @@ public final class AccountData {
 
     private final double balance;
 
+    private String accountType;
+
     AccountData(int id, String name, String email, double balance) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.balance = balance;
+        this.accountType = "Basic";
     }
 
     public int getId() {
@@ -40,6 +43,14 @@ public final class AccountData {
                 "Name: " + name + '\n' +
                 "Email: " + email + '\n' +
                 String.format("Balance: %1.2f",balance);
-             //   "Balance: " + balance;
+        //   "Balance: " + balance;
     }
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
 }
