@@ -57,6 +57,10 @@ public class CashMachine {
         return accountData!=null;
     }
 
+    public void addNewAccount(int id,String acctType,String name,String email,double balance){
+        this.bank.addNewAccount(id,acctType,name,email,balance);
+    }
+
     @Override
     public String toString() {
         String acctListPrompt = bank.getAcctListPrompt();

@@ -66,11 +66,17 @@ public class CashMachineApp extends Application {
             areaInfo.setText(cashMachine.toString());
         });
 
+   /*     Button btnNewAcct = new Button("Add New Account");
+        btnNewAcct.setOnAction(e ->{
+            AddNewAccountDialog newAccDg = new AddNewAccountDialog();
+            newAccDg.newAccount(cashMachine);
+        });*/
 
         flowpane.getChildren().add(btnSubmit);
         flowpane.getChildren().add(btnDeposit);
         flowpane.getChildren().add(btnWithdraw);
         flowpane.getChildren().add(btnExit);
+     //   flowpane.getChildren().add(btnNewAcct);
         vbox.getChildren().addAll(field, flowpane, areaInfo);
         return vbox;
     }
