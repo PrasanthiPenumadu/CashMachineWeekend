@@ -9,13 +9,16 @@ public final class AccountData {
     private final String name;
     private final String email;
 
-    private final int balance;
+    private final double balance;
 
-    AccountData(int id, String name, String email, int balance) {
+    private String accountType;
+
+    AccountData(int id, String name, String email, double balance) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.balance = balance;
+        this.accountType = "Basic";
     }
 
     public int getId() {
@@ -30,7 +33,7 @@ public final class AccountData {
         return email;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
@@ -39,6 +42,15 @@ public final class AccountData {
         return "Account id: " + id + '\n' +
                 "Name: " + name + '\n' +
                 "Email: " + email + '\n' +
-                "Balance: " + balance;
+                String.format("Balance: %1.2f",balance);
+        //   "Balance: " + balance;
     }
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
 }
