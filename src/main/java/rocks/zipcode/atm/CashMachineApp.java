@@ -145,6 +145,7 @@ public class CashMachineApp extends Application {
             newAccDg.newAccount(cashMachine);
             updateAccountListSelector(options);
             comboBox.getSelectionModel().selectFirst();
+            updateAccountListSelector(options);
         });
 
         flowpane.getChildren().add(btnSubmit);
@@ -423,6 +424,8 @@ public class CashMachineApp extends Application {
            btnNewAcct.setOnAction(e ->{
                AddNewAccountDialog newAccDg = new AddNewAccountDialog();
                newAccDg.newAccount(cashMachine);
+               updateAccountListSelector(options);
+               comboBox.getSelectionModel().selectFirst();
            });
 
 
@@ -435,7 +438,8 @@ public class CashMachineApp extends Application {
 
 
                showAndHide(allControls,toShowOnExit);
-
+               updateAccountListSelector(options);
+               comboBox.getSelectionModel().selectFirst();
 
 
                areaInfo.setText(cashMachine.toString());
