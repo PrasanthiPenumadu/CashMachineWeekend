@@ -350,15 +350,12 @@ public class CashMachineApp extends Application {
 
 
 
-
-
-
-
            // Alex added
         accountLabel.relocate(160, 125);
 
         field.relocate(200, 290);
         field.setVisible(false);
+
 
         btnNewAcct.relocate(285, 210);
         comboBox.relocate(80, 210);
@@ -383,9 +380,7 @@ public class CashMachineApp extends Application {
            btnDeposit.setLayoutY(330);
            btnDeposit.setOnAction(e -> {
                double amount=0.0;
-               try {
-                   amount = Double.parseDouble(field.getText());
-               } catch (NumberFormatException nfeDeposit) {}
+               amount = getAmount(areaInfo, amount);
                cashMachine.deposit(amount);
                redrawAcctInfo(accountIdLabel2, accountTypeLabel2, clientNameLabel2, clientEmailLabel2, accountBalanceLabel2);
 
@@ -400,9 +395,7 @@ public class CashMachineApp extends Application {
            btnWithdraw.setLayoutY(330);
            btnWithdraw.setOnAction(e -> {
                double amount=0.0;
-               try {
-                   amount = Double.parseDouble(field.getText());
-               } catch (NumberFormatException nfeWithdraw) {}
+               amount = getAmount(areaInfo, amount);
                cashMachine.withdraw(amount);
                redrawAcctInfo(accountIdLabel2, accountTypeLabel2, clientNameLabel2, clientEmailLabel2, accountBalanceLabel2);
 
@@ -516,6 +509,13 @@ public class CashMachineApp extends Application {
 
     }
 
+    private double getAmount(TextArea areaInfo, double amount) {
+        try {
+            amount = Double.parseDouble(field.getText());
+        } catch (NumberFormatException nfeWithdraw) {areaInfo.setText("Please enter a valid amount.");}
+        return amount;
+    }
+
     private void redrawAcctInfo(Label accountIdLabel2, Label accountTypeLabel2, Label clientNameLabel2, Label clientEmailLabel2, Label accountBalanceLabel2) {
         String parts = cashMachine.toDataString();
 
@@ -550,6 +550,7 @@ public class CashMachineApp extends Application {
         for (Node node : toShow) {
             node.setVisible(true);
         }
+        field.setText("");
     }
 
 
