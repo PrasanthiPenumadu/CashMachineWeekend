@@ -11,11 +11,14 @@ public final class AccountData {
 
     private final int balance;
 
+    private String accountType;
+
     AccountData(int id, String name, String email, int balance) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.balance = balance;
+        this.accountType = "Basic";
     }
 
     public int getId() {
@@ -34,11 +37,32 @@ public final class AccountData {
         return balance;
     }
 
-    @Override
-    public String toString() {
-        return "Account id: " + id + '\n' +
-                "Name: " + name + '\n' +
-                "Email: " + email + '\n' +
-                "Balance: " + balance;
+
+        @Override
+        public String toString() {
+            return "Account id: " + id + '\n' +
+                    "Name: " + name + '\n' +
+                    "Email: " + email + '\n' +
+                    "Balance: " + balance;
+        }
+
+
+/*
+
+
+       @Override
+        public String toString() {
+            return "(01)" + id + "(02)" + name + "(03)" + email + "(04)" + balance + "(05)" + accountType + "(06)";
+        }
+
+
+    */
+    public String getAccountType() {
+        return accountType;
     }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
 }
