@@ -24,19 +24,15 @@ public class CashMachineApp extends Application {
 
     private TextField field = new TextField();
     private CashMachine cashMachine = new CashMachine(new Bank());
+    private ObservableList<Integer> options = FXCollections.observableArrayList();
 
     private Parent createContent() {
 
         FlowPane flowpane = new FlowPane();
         VBox vbox = new VBox(10);
         vbox.setPrefSize(600, 600);
-
         TextArea areaInfo = new TextArea();
-        Integer [] acctIdList = cashMachine.getAccountIdList();
-        ObservableList<Integer> options = FXCollections.observableArrayList();
-        for (int i = 0; i <acctIdList.length ; i++) {
-            options.add(acctIdList[i]);
-        }
+        updateAccountListSelector(options);
         ComboBox<Integer> comboBox = new ComboBox<>(options);
         comboBox.getSelectionModel().selectFirst();
 //      Menu m=new Menu("Accounts")  ;
@@ -117,6 +113,7 @@ public class CashMachineApp extends Application {
             cashMachine.exit();
             Node[] toHide={btnExit,btnWithdraw,btnDeposit};
             setVisibleOnExit(toHide);
+            comboBox.getSelectionModel().selectFirst();
             areaInfo.setText(cashMachine.toString());
         });
 
@@ -127,7 +124,7 @@ public class CashMachineApp extends Application {
             cashMachine.login(id);
             Node[] toShow = {btnExit,btnDeposit,btnWithdraw};
             setVisibleOnLogin(toShow);
-
+            comboBox.getSelectionModel().selectFirst();
             areaInfo.setText(cashMachine.toString());
         });
 
@@ -135,6 +132,8 @@ public class CashMachineApp extends Application {
         btnNewAcct.setOnAction(e ->{
             AddNewAccountDialog newAccDg = new AddNewAccountDialog();
             newAccDg.newAccount(cashMachine);
+            updateAccountListSelector(options);
+            comboBox.getSelectionModel().selectFirst();
         });
 
         flowpane.getChildren().add(btnSubmit);
@@ -153,12 +152,14 @@ public class CashMachineApp extends Application {
                 node.setVisible(true);
             }
         }
+        updateAccountListSelector(options);
     }
 
     public void setVisibleOnExit(Node[] args){
         for (Node node:args) {
             node.setVisible(false);
         }
+        updateAccountListSelector(options);
     }
 
     private boolean isInt(String text) {
@@ -167,6 +168,14 @@ public class CashMachineApp extends Application {
         }catch (NumberFormatException e){
             System.out.println("Enter a number");
         }return true;
+    }
+
+    private void updateAccountListSelector(ObservableList<Integer> options){
+        Integer [] acctIdList = cashMachine.getAccountIdList();
+        options.clear();
+        for (int i = 0; i <acctIdList.length ; i++) {
+            options.add(acctIdList[i]);
+        }
     }
 
 
