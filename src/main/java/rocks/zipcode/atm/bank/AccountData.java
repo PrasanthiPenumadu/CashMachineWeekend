@@ -9,11 +9,11 @@ public final class AccountData {
     private final String name;
     private final String email;
 
-    private final int balance;
+    private final double balance;
 
     private String accountType;
 
-    AccountData(int id, String name, String email, int balance) {
+    AccountData(int id, String name, String email, double balance) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -33,30 +33,30 @@ public final class AccountData {
         return email;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
+    @Override
+    public String toString() {
+        return "Account id: " + id + '\n' +
+                "Name: " + name + '\n' +
+                "Email: " + email + '\n' +
+                String.format("Balance: %1.2f",balance);
+        //   "Balance: " + balance;
+    }
 
-        @Override
-        public String toString() {
-            return "Account id: " + id + '\n' +
-                    "Name: " + name + '\n' +
-                    "Email: " + email + '\n' +
-                    "Balance: " + balance;
-        }
+    /*
 
 
-/*
-
-
-       @Override
-        public String toString() {
-            return "(01)" + id + "(02)" + name + "(03)" + email + "(04)" + balance + "(05)" + accountType + "(06)";
-        }
+    @Override
+    public String toString() {
+        return "(01)" + id + "(02)" + name + "(03)" + email + "(04)" + balance + "(05)" + accountType + "(06)";
+    }
 
 
     */
+
     public String getAccountType() {
         return accountType;
     }

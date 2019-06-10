@@ -9,6 +9,7 @@ Welcome to your first App. "ZipCloudBank", a local Wilmington fintech startup, h
 viable product in CashMachine. The response from customers has been, shall we say, underwhelming.
 The original coder has gone off to another startup, in Thailand, where they code on surfboards
 all day long.
+
 The Board of Directors of ZipCloudBank have empowered me to let you take a crack at "upping their game"
 and improving their app over this weekend. Impressed that you are a ZipCode student, they are
 expecting great things. Don't panic: we think you can do this.
