@@ -109,7 +109,7 @@ public class CashMachineApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         stage.setScene(new Scene(createContent()));
-//        initUI(stage);                                  // Alex added
+        initUI(stage);                                  // Alex added
         stage.show();
     }
 
@@ -134,13 +134,17 @@ public class CashMachineApp extends Application {
            Label clientNameLabel2 = new Label("Client Name: ");
            Label clientEmailLabel2 = new Label("Client Email: ");
            Label accountBalanceLabel2 = new Label("Account Balance: ");
-           Label creditScoreLabel = new Label("Your Credit Score is: ");
-           Label splashLabel = new Label("Welcome");
+       //    Label creditScoreLabel = new Label("Your Credit Score is: ");
+      //     Label splashLabel = new Label("Welcome");
            Label accountLabel = new Label("Enter your account number");
            Button btnDeposit = new Button("Deposit");
            Button btnWithdraw = new Button("Withdraw");
            Button btnExit = new Button("Logout");
            Button btnSubmit = new Button("Open Account");
+           Button btnNewAcct = new Button("Add New Account");
+
+
+
 
            Node[] allControls = {
                    btnSubmit,
@@ -158,10 +162,9 @@ public class CashMachineApp extends Application {
                    accountTypeLabel2,
                    clientNameLabel2,
                    clientEmailLabel2,
+                   btnNewAcct,
                    accountBalanceLabel2
            };
-           Node[] toShow;
-
 
            areaInfo.setLayoutX(0);
             areaInfo.setLayoutY(375);
@@ -236,7 +239,7 @@ public class CashMachineApp extends Application {
 
 
 
-
+/*
            int creditScore = (int) (548 * Math.random()) + 301;
            // Alex added
         creditScoreLabel.relocate(50.0, 20.0);
@@ -252,7 +255,7 @@ public class CashMachineApp extends Application {
         splashLabel.setDisable(false);
         splashLabel.setVisible(false);
 
-
+*/
 
 
 
@@ -265,7 +268,16 @@ public class CashMachineApp extends Application {
 
         field.relocate(160, 150);
 
+        btnNewAcct.relocate(300, 300);
 
+
+
+
+
+           btnNewAcct.setOnAction(e ->{
+               AddNewAccountDialog newAccDg = new AddNewAccountDialog();
+               newAccDg.newAccount(cashMachine);
+           });
 
 
 
@@ -298,11 +310,31 @@ public class CashMachineApp extends Application {
            w = btnWithdraw.getWidth() + 30.0;
 
 
+           final Node[] toShowOnExit = new Node[]{
+                   field,
+                   accountLabel,
+                   btnNewAcct,
+                   btnSubmit
+           };
+
+
+           btnNewAcct.setOnAction(e ->{
+               AddNewAccountDialog newAccDg = new AddNewAccountDialog();
+               newAccDg.newAccount(cashMachine);
+           });
+
+
            btnExit.setLayoutX(400);
            btnExit.setLayoutY(330);
 
            btnExit.setOnAction(e -> {
                cashMachine.exit();
+
+
+
+               showAndHide(allControls,toShowOnExit);
+
+
 
                areaInfo.setText(cashMachine.toString());
            });
@@ -311,7 +343,7 @@ public class CashMachineApp extends Application {
 
 
 
-           toShow = new Node[]{
+           final Node[] toShowOnLogin = new Node[]{
                    btnDeposit,
                    btnWithdraw,
                    btnExit,
@@ -327,7 +359,8 @@ public class CashMachineApp extends Application {
                    accountBalanceLabel2
            };
           btnSubmit.setLayoutX(220);
-          btnSubmit.setLayoutY(210); accountBalanceLabel1.setText(areaInfo.getText());
+          btnSubmit.setLayoutY(210);
+          //accountBalanceLabel1.setText(areaInfo.getText());
            btnSubmit.setOnAction(e -> {
                int id = Integer.parseInt(field.getText());
                cashMachine.login(id);
@@ -337,7 +370,9 @@ public class CashMachineApp extends Application {
            //    areaInfo.setText(cashMachine.toString());
 
 
-            showAndHide(allControls,toShow);
+            showAndHide(allControls,toShowOnLogin);
+
+
               /*  btnSubmit.setVisible(false);
                accountLabel.setVisible(false);
                field.setVisible(false);
@@ -397,8 +432,8 @@ public class CashMachineApp extends Application {
 
            root.getChildren().addAll(accountIdLabel1, accountTypeLabel1, accountBalanceLabel1, clientNameLabel1, clientEmailLabel1);
            root.getChildren().addAll(accountIdLabel2, accountTypeLabel2, accountBalanceLabel2, clientNameLabel2, clientEmailLabel2);
-           root.getChildren().addAll(splashLabel, accountLabel, field, btnSubmit, areaInfo);
-           root.getChildren().addAll(btnDeposit, btnWithdraw, btnExit);
+           root.getChildren().addAll(accountLabel, field, btnSubmit, areaInfo);
+           root.getChildren().addAll(btnDeposit, btnWithdraw, btnExit, btnNewAcct);
 
 
         Scene scene = new Scene(root, 500, 400, Color.WHITESMOKE);

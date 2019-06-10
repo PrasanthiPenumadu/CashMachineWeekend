@@ -36,7 +36,7 @@ public final class AccountData {
     public double getBalance() {
         return balance;
     }
-
+/*
     @Override
     public String toString() {
         return "Account id: " + id + '\n' +
@@ -45,8 +45,8 @@ public final class AccountData {
                 String.format("Balance: %1.2f",balance);
         //   "Balance: " + balance;
     }
+*/
 
-    /*
 
 
     @Override
@@ -55,7 +55,7 @@ public final class AccountData {
     }
 
 
-    */
+
 
     public String getAccountType() {
         return accountType;
