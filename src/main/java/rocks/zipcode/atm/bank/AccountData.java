@@ -39,6 +39,11 @@ public final class AccountData {
 /*
     @Override
     public String toString() {
+        if(balance<0){ return "Account id: " + id + '\n' +
+                "Name: " + name + '\n' +
+                "Email: " + email + '\n' +
+                String.format("Balance: %1.2f",balance)+"\n"+"Alert: Your Account is OverDraft";}
+else
         return "Account id: " + id + '\n' +
                 "Name: " + name + '\n' +
                 "Email: " + email + '\n' +
