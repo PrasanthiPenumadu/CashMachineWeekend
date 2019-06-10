@@ -43,24 +43,63 @@ public class Bank {
         return integerarr;
     }
 
+    public ActionResult<AccountData> addNewAccount(int id, String accountType, String name, String email, double balance){
+        Account account = accounts.get(id);
+
+        if(account==null) {
+            return ActionResult.success(this.addAccount(id, accountType, name, email, balance));
+        } else {
+            String acctListPrompt = getAcctListPrompt();
+            return ActionResult.fail("Unable to create account, ID " + id + " associated with existing account.\n" +
+                    "Please try again with an ID other than "+acctListPrompt);
+        }
+    }
+
+    private AccountData addAccount(int id, String accountType, String name, String email, double balance){
+        switch (accountType){
+            case "Premium":{
+                accounts.put(id, new PremiumAccount(new AccountData(id,name,email,balance)));
+                break;
+            }
+            default: {
+                accounts.put(id, new BasicAccount(new AccountData(id,name,email,balance)));
+                break;
+            }
+        }
+        return accounts.get(id).getAccountData();
+    }
+
     public ActionResult<AccountData> getAccountById(int id) {
         Account account = accounts.get(id);
 
         if (account != null) {
             return ActionResult.success(account.getAccountData());
         } else {
-            return ActionResult.fail("No account with ID: " + id + "\nTry another account ID");
+            String acctListPrompt = getAcctListPrompt();
+            return ActionResult.fail("No account with id: " + id + "\nTry account "+acctListPrompt);
         }
     }
 
-    public ActionResult<AccountData> deposit(AccountData accountData, int amount) {
+    public String getAcctListPrompt() {
+        StringBuilder builder = new StringBuilder();
+        List<Integer> keysArrList = new ArrayList<>(Arrays.asList(accounts.keySet().toArray(new Integer[0])));
+        Collections.sort(keysArrList);
+        for (int i = 0; i < accounts.size()-2; i++) {
+            builder.append(keysArrList.get(i)).append(", ");
+        }
+        if(accounts.size()>1) builder.append(keysArrList.get(accounts.size()-2)).append(" or ");
+        builder.append(keysArrList.get(accounts.size()-1));
+        return builder.toString();
+    }
+
+    public ActionResult<AccountData> deposit(AccountData accountData, double amount) {
         Account account = accounts.get(accountData.getId());
         account.deposit(amount);
 
         return ActionResult.success(account.getAccountData());
     }
 
-    public ActionResult<AccountData> withdraw(AccountData accountData, int amount) {
+    public ActionResult<AccountData> withdraw(AccountData accountData, double amount) {
         Account account = accounts.get(accountData.getId());
         boolean ok = account.withdraw(amount);
 

@@ -8,16 +8,17 @@ public final class AccountData {
     private final int id;
     private final String name;
     private final String email;
-    public String errorMessage;
 
-    private final int balance;
-    private AccountData accountData = null;
-    PremiumAccount pa=new PremiumAccount(accountData);
-    AccountData(int id, String name, String email, int balance) {
+    private final double balance;
+
+    private String accountType;
+
+    AccountData(int id, String name, String email, double balance) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.balance = balance;
+        this.accountType = "Basic";
     }
 
     public int getId() {
@@ -32,7 +33,7 @@ public final class AccountData {
         return email;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
@@ -41,14 +42,20 @@ public final class AccountData {
         if(balance<0){ return "Account id: " + id + '\n' +
                 "Name: " + name + '\n' +
                 "Email: " + email + '\n' +
-                "Balance: " + balance+"\n"+"Alert: Your Account is OverDraft";}
+                String.format("Balance: %1.2f",balance)+"\n"+"Alert: Your Account is OverDraft";}
 else
         return "Account id: " + id + '\n' +
                 "Name: " + name + '\n' +
                 "Email: " + email + '\n' +
-                "Balance: " + balance;
+                String.format("Balance: %1.2f",balance);
+        //   "Balance: " + balance;
     }
-//    public String toString(String errorMessage){
-//        return errorMessage;
-//    }
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
 }

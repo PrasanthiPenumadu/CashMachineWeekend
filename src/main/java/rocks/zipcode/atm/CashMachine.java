@@ -15,7 +15,7 @@ public class CashMachine {
 
     private final Bank bank;
     private AccountData accountData = null;
-    PremiumAccount pa=new PremiumAccount(accountData);
+//    PremiumAccount pa=new PremiumAccount(accountData);
  //   public String errorMessage = "";
     public CashMachine(Bank bank) {
         this.bank = bank;
@@ -41,7 +41,7 @@ public class CashMachine {
         }
     }
 
-    public void deposit(int amount) {
+    public void deposit(double amount) {
         if (accountData != null&&amount>0) {
             tryCall(
                     () -> bank.deposit(accountData, amount),
@@ -50,7 +50,7 @@ public class CashMachine {
         }
     }
 
-    public void withdraw(int amount) {
+    public void withdraw(double amount) {
         if (accountData != null&&amount>0) {
             tryCall(
                     () -> bank.withdraw(accountData, amount),
@@ -65,20 +65,18 @@ public class CashMachine {
         }
     }
 
+    public Boolean isAccountData(){
+        return accountData!=null;
+    }
+
+    public void addNewAccount(int id,String acctType,String name,String email,double balance){
+        this.bank.addNewAccount(id,acctType,name,email,balance);
+    }
+
     @Override
     public String toString() {
-int amount=0;
-//        if(pa.withdraw(amount)==false)
-//            return accountData != null ? accountData.toString() : "Withdraw failed";
-//        else
-        return accountData != null ? accountData.toString() : "Try another account and click Set Account Id.";
-//        if (accountData!=null){
-//            if (!(errorMessage.isEmpty())) return accountData.toString(); else return errorMessage;
-//
-//        }
-//        else return "Try another account and click Set Account Id.";
- //if(pa.withdraw(amount)==false)
-      //return accountData != null ? accountData.toString() : "Try another account and click submit.";
+        String acctListPrompt = bank.getAcctListPrompt();
+        return accountData != null ? accountData.toString() : "Try account "+acctListPrompt+" and click submit.";
     }
 
     private <T> void tryCall(Supplier<ActionResult<T> > action, Consumer<T> postAction) {
@@ -96,7 +94,6 @@ int amount=0;
             }
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
-
         }
     }
 
