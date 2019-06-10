@@ -1,5 +1,10 @@
 package rocks.zipcode.atm;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.*;
 import javafx.scene.Node;
 import rocks.zipcode.atm.bank.Bank;
 import javafx.application.Application;
@@ -27,6 +32,65 @@ public class CashMachineApp extends Application {
         vbox.setPrefSize(600, 600);
 
         TextArea areaInfo = new TextArea();
+        Integer [] acctIdList = cashMachine.getAccountIdList();
+        ObservableList<Integer> options = FXCollections.observableArrayList();
+        for (int i = 0; i <acctIdList.length ; i++) {
+            options.add(acctIdList[i]);
+        }
+        ComboBox<Integer> comboBox = new ComboBox<>(options);
+        comboBox.getSelectionModel().selectFirst();
+//      Menu m=new Menu("Accounts")  ;
+//      Integer [] acctIdList = cashMachine.getAccountIdList();
+//      MenuItem[] menuItems = new MenuItem[acctIdList.length];
+//        Label l = new Label("\t" + "  select");
+//      EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+//            public void handle(ActionEvent e)
+//            {
+//                l.setText(((MenuItem)e.getSource()).getText());
+//            }};
+//        for (int i = 0; i < acctIdList.length ; i++) {
+//            menuItems[i]=new MenuItem(String.format("%10d",acctIdList[i]));
+//          //  m.getItems().add(menuItems[i]);
+//            event = new EventHandler<ActionEvent>() {
+//                public void handle(ActionEvent e)
+//                {
+//                   // field.setText(acctIdList[i].toString());
+//                }};
+//            (menuItems[i]).setOnAction(event);
+//        }
+//        MenuItem m1 = new MenuItem("        1000");
+//        MenuItem m2 = new MenuItem("        2000");
+//        MenuItem m3 = new MenuItem("        1800");
+//        MenuItem m4 = new MenuItem("        2500");
+//        MenuItem m5 = new MenuItem("        2100");
+//
+//        m.getItems().add(m1);
+//        m.getItems().add(m2);
+//        m.getItems().add(m3);
+//        m.getItems().add(m4);
+//        m.getItems().add(m5);
+
+
+
+//        m1.setOnAction(event);
+//        m2.setOnAction(event);
+//        m3.setOnAction(event);
+//        m4.setOnAction(event);
+//        m5.setOnAction(event);
+//        MenuBar mb=new MenuBar();
+//        mb.getMenus().add(m);
+//       // VBox vb1=new VBox(mb,l);
+//        VBox vb1=new VBox(mb);
+//m.setOnAction(e -> isInt(field.getText()));
+//        //Scene sc=new Scene(vb1);
+////Stage.setScene(sc);
+//        try{
+//        m.setOnAction(e -> {
+//            int id = Integer.parseInt(field.getText());
+//            cashMachine.login(id);
+//            areaInfo.setText(cashMachine.toString());
+//        });
+
 
 
         Button btnDeposit = new Button("Deposit");
@@ -56,13 +120,14 @@ public class CashMachineApp extends Application {
             areaInfo.setText(cashMachine.toString());
         });
 
-
         Button btnSubmit = new Button("Set Account ID");
         btnSubmit.setOnAction(e -> {
-            int id = Integer.parseInt(field.getText());
+            //  int id = Integer.parseInt(field.getText());
+            int id = comboBox.getValue();
             cashMachine.login(id);
             Node[] toShow = {btnExit,btnDeposit,btnWithdraw};
             setVisibleOnLogin(toShow);
+
             areaInfo.setText(cashMachine.toString());
         });
 
@@ -73,10 +138,11 @@ public class CashMachineApp extends Application {
         });
 
         flowpane.getChildren().add(btnSubmit);
+        flowpane.getChildren().add(comboBox);
         flowpane.getChildren().add(btnDeposit);
         flowpane.getChildren().add(btnWithdraw);
         flowpane.getChildren().add(btnExit);
-     //   flowpane.getChildren().add(btnNewAcct);
+        flowpane.getChildren().add(btnNewAcct);
         vbox.getChildren().addAll(field, flowpane, areaInfo);
         return vbox;
     }
@@ -94,6 +160,15 @@ public class CashMachineApp extends Application {
             node.setVisible(false);
         }
     }
+
+    private boolean isInt(String text) {
+        try{
+            int id=Integer.parseInt(text);
+        }catch (NumberFormatException e){
+            System.out.println("Enter a number");
+        }return true;
+    }
+
 
     @Override
     public void start(Stage stage) throws Exception {
