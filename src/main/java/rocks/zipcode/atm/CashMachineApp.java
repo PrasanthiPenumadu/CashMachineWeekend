@@ -229,6 +229,11 @@ public class CashMachineApp extends Application {
 
 
 
+           updateAccountListSelector(options);
+           ComboBox<Integer> comboBox = new ComboBox<>(options);
+           comboBox.getSelectionModel().selectFirst();
+
+
 
            Node[] allControls = {
                    btnSubmit,
@@ -247,6 +252,7 @@ public class CashMachineApp extends Application {
                    clientNameLabel2,
                    clientEmailLabel2,
                    btnNewAcct,
+                   comboBox,
                    accountBalanceLabel2
            };
 
@@ -350,11 +356,14 @@ public class CashMachineApp extends Application {
            // Alex added
         accountLabel.relocate(160, 125);
 
-        field.relocate(160, 150);
+        field.relocate(200, 290);
+        field.setVisible(false);
 
-        btnNewAcct.relocate(300, 300);
+        btnNewAcct.relocate(285, 210);
+        comboBox.relocate(80, 210);
 
-
+           btnSubmit.setLayoutX(170);
+           btnSubmit.setLayoutY(210);
 
 
 
@@ -372,10 +381,14 @@ public class CashMachineApp extends Application {
            btnDeposit.setLayoutX(w);
            btnDeposit.setLayoutY(330);
            btnDeposit.setOnAction(e -> {
-               int amount = Integer.parseInt(field.getText());
+               double amount=0.0;
+               try {
+                   amount = Double.parseDouble(field.getText());
+               } catch (NumberFormatException nfeDeposit) {}
                cashMachine.deposit(amount);
+               redrawAcctInfo(accountIdLabel2, accountTypeLabel2, clientNameLabel2, clientEmailLabel2, accountBalanceLabel2);
 
-               areaInfo.setText(cashMachine.toString());
+          //     areaInfo.setText(cashMachine.toString());
            });
 
 
@@ -385,19 +398,24 @@ public class CashMachineApp extends Application {
            btnWithdraw.setLayoutX(300);
            btnWithdraw.setLayoutY(330);
            btnWithdraw.setOnAction(e -> {
-               int amount = Integer.parseInt(field.getText());
+               double amount=0.0;
+               try {
+                   amount = Double.parseDouble(field.getText());
+               } catch (NumberFormatException nfeWithdraw) {}
                cashMachine.withdraw(amount);
+               redrawAcctInfo(accountIdLabel2, accountTypeLabel2, clientNameLabel2, clientEmailLabel2, accountBalanceLabel2);
 
-               areaInfo.setText(cashMachine.toString());
+           //    areaInfo.setText(cashMachine.toString());
            });
 
            w = btnWithdraw.getWidth() + 30.0;
 
 
            final Node[] toShowOnExit = new Node[]{
-                   field,
+             //      field,
                    accountLabel,
                    btnNewAcct,
+                   comboBox,
                    btnSubmit
            };
 
@@ -431,6 +449,7 @@ public class CashMachineApp extends Application {
                    btnDeposit,
                    btnWithdraw,
                    btnExit,
+                   field,
                    accountIdLabel1,
                    accountTypeLabel1,
                    clientNameLabel1,
@@ -442,11 +461,11 @@ public class CashMachineApp extends Application {
                    clientEmailLabel2,
                    accountBalanceLabel2
            };
-          btnSubmit.setLayoutX(220);
-          btnSubmit.setLayoutY(210);
+
           //accountBalanceLabel1.setText(areaInfo.getText());
            btnSubmit.setOnAction(e -> {
-               int id = Integer.parseInt(field.getText());
+      //         int id = Integer.parseInt(field.getText());
+               int id = comboBox.getValue();
                cashMachine.login(id);
 
 
@@ -454,53 +473,10 @@ public class CashMachineApp extends Application {
            //    areaInfo.setText(cashMachine.toString());
 
 
-            showAndHide(allControls,toShowOnLogin);
+                showAndHide(allControls,toShowOnLogin);
 
 
-              /*  btnSubmit.setVisible(false);
-               accountLabel.setVisible(false);
-               field.setVisible(false);
-
-               accountIdLabel1.setVisible(true);
-               accountTypeLabel1.setVisible(true);
-               clientNameLabel1.setVisible(true);
-               clientEmailLabel1.setVisible(true);
-               accountBalanceLabel1.setVisible(true);
-
-
-               accountIdLabel2.setVisible(true);
-               accountTypeLabel2.setVisible(true);
-               clientNameLabel2.setVisible(true);
-               clientEmailLabel2.setVisible(true);
-               accountBalanceLabel2.setVisible(true);
-
-               btnDeposit.setVisible(true);
-               btnWithdraw.setVisible(true);
-               btnExit.setVisible(true);
-*/
-
-
-
-                String parts = cashMachine.toString();
-
-                Integer i1 = parts.indexOf("(01)");
-               Integer i2 = parts.indexOf("(02)");
-               Integer i3 = parts.indexOf("(03)");
-               Integer i4 = parts.indexOf("(04)");
-               Integer i5 = parts.indexOf("(05)");
-               Integer i6 = parts.indexOf("(06)");
-
-
-
-
-               accountIdLabel2.setText(parts.substring(i1+4, i2));
-               clientNameLabel2.setText(parts.substring(i2+4, i3));
-               clientEmailLabel2.setText(parts.substring(i3+4, i4));
-               accountBalanceLabel2.setText("$" + parts.substring(i4+4, i5));
-               accountTypeLabel2.setText(parts.substring(i5+4, i6));
-
-
-
+               redrawAcctInfo(accountIdLabel2, accountTypeLabel2, clientNameLabel2, clientEmailLabel2, accountBalanceLabel2);
 
 
            });
@@ -517,7 +493,7 @@ public class CashMachineApp extends Application {
            root.getChildren().addAll(accountIdLabel1, accountTypeLabel1, accountBalanceLabel1, clientNameLabel1, clientEmailLabel1);
            root.getChildren().addAll(accountIdLabel2, accountTypeLabel2, accountBalanceLabel2, clientNameLabel2, clientEmailLabel2);
            root.getChildren().addAll(accountLabel, field, btnSubmit, areaInfo);
-           root.getChildren().addAll(btnDeposit, btnWithdraw, btnExit, btnNewAcct);
+           root.getChildren().addAll(btnDeposit, btnWithdraw, btnExit, btnNewAcct, comboBox);
 
 
         Scene scene = new Scene(root, 500, 400, Color.WHITESMOKE);
@@ -535,6 +511,32 @@ public class CashMachineApp extends Application {
 
 
     }
+
+    private void redrawAcctInfo(Label accountIdLabel2, Label accountTypeLabel2, Label clientNameLabel2, Label clientEmailLabel2, Label accountBalanceLabel2) {
+        String parts = cashMachine.toDataString();
+
+        Integer i1 = parts.indexOf("(01)");
+        Integer i2 = parts.indexOf("(02)");
+        Integer i3 = parts.indexOf("(03)");
+        Integer i4 = parts.indexOf("(04)");
+        Integer i5 = parts.indexOf("(05)");
+        Integer i6 = parts.indexOf("(06)");
+
+        Double balance=0.0;
+
+        try {
+            balance = Double.parseDouble(parts.substring(i4 + 4, i5));
+        } catch (NumberFormatException e) {
+
+        }
+
+        accountIdLabel2.setText(parts.substring(i1+4, i2));
+        clientNameLabel2.setText(parts.substring(i2+4, i3));
+        clientEmailLabel2.setText(parts.substring(i3+4, i4));
+        accountBalanceLabel2.setText(String.format("$%1.2f", balance));
+        accountTypeLabel2.setText(parts.substring(i5+4, i6));
+    }
+
     public void showAndHide(Node[] toHide, Node[] toShow) {
 
         for (Node node : toHide) {
