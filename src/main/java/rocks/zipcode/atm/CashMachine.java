@@ -77,6 +77,7 @@ public class CashMachine {
     public String toString() {
         String acctListPrompt = bank.getAcctListPrompt();
         return accountData != null ? accountData.toString() : "Try account "+acctListPrompt+" and click submit.";
+
     }
 
     private <T> void tryCall(Supplier<ActionResult<T> > action, Consumer<T> postAction) {
