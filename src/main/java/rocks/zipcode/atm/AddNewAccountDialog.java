@@ -44,7 +44,7 @@ public class AddNewAccountDialog {
                         textField2.getText(),Double.parseDouble(textField3.getText()),comboBox.getValue());
                         */
                     Integer id = Integer.parseInt(textField1.getText());
-                    cashMachine.addNewAccount(id, comboBox.getValue().toString(), textField.getText(),
+                    insertAcct(cashMachine,id, comboBox.getValue().toString(), textField.getText(),
                             textField2.getText(),Double.parseDouble(textField3.getText()));
                     return id;
             }
@@ -77,4 +77,8 @@ public class AddNewAccountDialog {
     public static void main(String[] args) {
         launch(args);
     }*/
+
+    void insertAcct(CashMachine cm, int id, String acctType, String name, String email, Double balance){
+        cm.addNewAccount(id,acctType,name,email,balance);
+    }
 }

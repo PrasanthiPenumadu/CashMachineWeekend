@@ -1,5 +1,7 @@
 package rocks.zipcode.atm.bank;
 
+import java.util.Objects;
+
 /**
  * @author ZipCodeWilmington
  */
@@ -69,4 +71,20 @@ else
         this.accountType = accountType;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AccountData that = (AccountData) o;
+        return id == that.id &&
+                Double.compare(that.balance, balance) == 0 &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(accountType, that.accountType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email, balance, accountType);
+    }
 }
