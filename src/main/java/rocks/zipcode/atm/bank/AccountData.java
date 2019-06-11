@@ -50,6 +50,17 @@ else
                 String.format("Balance: %1.2f",balance);
         //   "Balance: " + balance;
     }
+
+
+
+
+    public String toDataString() {
+        return "(01)" + id + "(02)" + name + "(03)" + email + "(04)" + balance + "(05)" + accountType + "(06)";
+    }
+
+
+
+
     public String getAccountType() {
         return accountType;
     }

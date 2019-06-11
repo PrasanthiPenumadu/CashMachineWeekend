@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+import rocks.zipcode.atm.bank.AccountData;
 import rocks.zipcode.atm.bank.Bank;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -17,6 +19,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.layout.FlowPane;
 
+import javafx.scene.control.Label;  // Alex added
+import javafx.scene.layout.Pane;  // Alex added
+import javafx.scene.paint.Color;  // Alex added
+
+import java.util.ArrayList;
+//import javafx.scene.shape.Circle;  // Alex added
+//import javafx.scene.shape.Line;  // Alex added                                    // Alex added
+//import javafx.scene.shape.Rectangle;  // Alex added
+
 /**
  * @author ZipCodeWilmington
  */
@@ -24,19 +35,15 @@ public class CashMachineApp extends Application {
 
     private TextField field = new TextField();
     private CashMachine cashMachine = new CashMachine(new Bank());
+    private ObservableList<Integer> options = FXCollections.observableArrayList();
 
     private Parent createContent() {
 
         FlowPane flowpane = new FlowPane();
         VBox vbox = new VBox(10);
         vbox.setPrefSize(600, 600);
-
         TextArea areaInfo = new TextArea();
-        Integer [] acctIdList = cashMachine.getAccountIdList();
-        ObservableList<Integer> options = FXCollections.observableArrayList();
-        for (int i = 0; i <acctIdList.length ; i++) {
-            options.add(acctIdList[i]);
-        }
+        updateAccountListSelector(options);
         ComboBox<Integer> comboBox = new ComboBox<>(options);
         comboBox.getSelectionModel().selectFirst();
 //      Menu m=new Menu("Accounts")  ;
@@ -117,6 +124,7 @@ public class CashMachineApp extends Application {
             cashMachine.exit();
             Node[] toHide={btnExit,btnWithdraw,btnDeposit};
             setVisibleOnExit(toHide);
+            comboBox.getSelectionModel().selectFirst();
             areaInfo.setText(cashMachine.toString());
         });
 
@@ -127,7 +135,7 @@ public class CashMachineApp extends Application {
             cashMachine.login(id);
             Node[] toShow = {btnExit,btnDeposit,btnWithdraw};
             setVisibleOnLogin(toShow);
-
+            comboBox.getSelectionModel().selectFirst();
             areaInfo.setText(cashMachine.toString());
         });
 
@@ -135,6 +143,9 @@ public class CashMachineApp extends Application {
         btnNewAcct.setOnAction(e ->{
             AddNewAccountDialog newAccDg = new AddNewAccountDialog();
             newAccDg.newAccount(cashMachine);
+            updateAccountListSelector(options);
+            comboBox.getSelectionModel().selectFirst();
+            updateAccountListSelector(options);
         });
 
         flowpane.getChildren().add(btnSubmit);
@@ -153,12 +164,14 @@ public class CashMachineApp extends Application {
                 node.setVisible(true);
             }
         }
+        updateAccountListSelector(options);
     }
 
     public void setVisibleOnExit(Node[] args){
         for (Node node:args) {
             node.setVisible(false);
         }
+        updateAccountListSelector(options);
     }
 
     private boolean isInt(String text) {
@@ -169,14 +182,380 @@ public class CashMachineApp extends Application {
         }return true;
     }
 
+    private void updateAccountListSelector(ObservableList<Integer> options){
+        Integer [] acctIdList = cashMachine.getAccountIdList();
+        options.clear();
+        for (int i = 0; i <acctIdList.length ; i++) {
+            options.add(acctIdList[i]);
+        }
+    }
+
 
     @Override
     public void start(Stage stage) throws Exception {
         stage.setScene(new Scene(createContent()));
+        initUI(stage);                                  // Alex added
         stage.show();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+
+
+
+ //       public Parent initUI() {
+       public Parent initUI(Stage stage) {
+
+        Pane root = new Pane();
+        TextArea areaInfo = new TextArea();
+        Label accountIdLabel1 = new Label("Account Number: ");
+        Label accountTypeLabel1 = new Label("Account Type: ");
+           Label clientNameLabel1 = new Label("Client Name: ");
+           Label clientEmailLabel1 = new Label("Client Email: ");
+           Label accountBalanceLabel1 = new Label("Account Balance: ");
+           Label accountIdLabel2 = new Label("Account Number: ");
+           Label accountTypeLabel2 = new Label("Account Type: ");
+           Label clientNameLabel2 = new Label("Client Name: ");
+           Label clientEmailLabel2 = new Label("Client Email: ");
+           Label accountBalanceLabel2 = new Label("Account Balance: ");
+       //    Label creditScoreLabel = new Label("Your Credit Score is: ");
+      //     Label splashLabel = new Label("Welcome");
+           Label accountLabel = new Label("Enter your account number");
+           Button btnDeposit = new Button("Deposit");
+           Button btnWithdraw = new Button("Withdraw");
+           Button btnExit = new Button("Logout");
+           Button btnSubmit = new Button("Open Account");
+           Button btnNewAcct = new Button("Add New Account");
+
+
+
+           updateAccountListSelector(options);
+           ComboBox<Integer> comboBox = new ComboBox<>(options);
+           comboBox.getSelectionModel().selectFirst();
+
+
+
+           Node[] allControls = {
+                   btnSubmit,
+                   btnDeposit,
+                   btnWithdraw,
+                   btnExit,
+                   accountLabel,
+                   field,
+                   accountIdLabel1,
+                   accountTypeLabel1,
+                   clientNameLabel1,
+                   clientEmailLabel1,
+                   accountBalanceLabel1,
+                   accountIdLabel2,
+                   accountTypeLabel2,
+                   clientNameLabel2,
+                   clientEmailLabel2,
+                   btnNewAcct,
+                   comboBox,
+                   accountBalanceLabel2
+           };
+
+           areaInfo.setLayoutX(0);
+            areaInfo.setLayoutY(375);
+            areaInfo.setVisible(true);
+
+
+
+           accountIdLabel1.relocate(100, 50);
+           accountIdLabel1.setDisable(false);
+           accountIdLabel1.setVisible(false);
+
+
+
+           accountTypeLabel1.relocate(100, 100);
+           accountTypeLabel1.setDisable(false);
+           accountTypeLabel1.setVisible(false);
+
+
+              // Alex added
+           clientNameLabel1.relocate(100, 150);
+           clientNameLabel1.setDisable(false);
+           clientNameLabel1.setVisible(false);
+
+
+              // Alex added
+           clientEmailLabel1.relocate(100, 200);
+           clientEmailLabel1.setDisable(false);
+           clientEmailLabel1.setVisible(false);
+
+
+
+           accountBalanceLabel1.relocate(100, 250);
+           accountBalanceLabel1.setDisable(false);
+           accountBalanceLabel1.setVisible(false);
+
+
+
+               // Alex added
+           accountIdLabel2.relocate(300, 50);
+           accountIdLabel2.setDisable(false);
+           accountIdLabel2.setVisible(false);
+
+
+               // Alex added
+           accountTypeLabel2.relocate(300, 100);
+           accountTypeLabel2.setDisable(false);
+           accountTypeLabel2.setVisible(false);
+
+
+               // Alex added
+           clientNameLabel2.relocate(300, 150);
+           clientNameLabel2.setDisable(false);
+           clientNameLabel2.setVisible(false);
+
+
+               // Alex added
+           clientEmailLabel2.relocate(300, 200);
+           clientEmailLabel2.setDisable(false);
+           clientEmailLabel2.setVisible(false);
+
+
+              // Alex added
+           accountBalanceLabel2.relocate(300, 250);
+           accountBalanceLabel2.setDisable(false);
+           accountBalanceLabel2.setVisible(false);
+
+
+
+
+
+
+
+
+
+/*
+           int creditScore = (int) (548 * Math.random()) + 301;
+           // Alex added
+        creditScoreLabel.relocate(50.0, 20.0);
+        creditScoreLabel.setDisable(false);
+        creditScoreLabel.setVisible(false);
+
+
+
+           // Alex added
+        splashLabel.relocate(40, 15);
+        splashLabel.setScaleX(2.0);
+        splashLabel.setScaleY(2.0);
+        splashLabel.setDisable(false);
+        splashLabel.setVisible(false);
+
+*/
+
+
+
+           // Alex added
+        accountLabel.relocate(160, 125);
+
+        field.relocate(200, 290);
+        field.setVisible(false);
+
+
+        btnNewAcct.relocate(285, 210);
+        comboBox.relocate(80, 210);
+
+           btnSubmit.setLayoutX(170);
+           btnSubmit.setLayoutY(210);
+
+
+
+           btnNewAcct.setOnAction(e ->{
+               AddNewAccountDialog newAccDg = new AddNewAccountDialog();
+               newAccDg.newAccount(cashMachine);
+           });
+
+
+
+
+           Double w = 200.0;
+
+
+           btnDeposit.setLayoutX(w);
+           btnDeposit.setLayoutY(330);
+           btnDeposit.setOnAction(e -> {
+               double amount=0.0;
+               amount = getAmount(areaInfo, amount);
+               cashMachine.deposit(amount);
+               redrawAcctInfo(accountIdLabel2, accountTypeLabel2, clientNameLabel2, clientEmailLabel2, accountBalanceLabel2);
+
+          //     areaInfo.setText(cashMachine.toString());
+           });
+
+
+           w = btnDeposit.getWidth() + 30.0;
+
+
+           btnWithdraw.setLayoutX(300);
+           btnWithdraw.setLayoutY(330);
+           btnWithdraw.setOnAction(e -> {
+               double amount=0.0;
+               amount = getAmount(areaInfo, amount);
+               cashMachine.withdraw(amount);
+               redrawAcctInfo(accountIdLabel2, accountTypeLabel2, clientNameLabel2, clientEmailLabel2, accountBalanceLabel2);
+
+           //    areaInfo.setText(cashMachine.toString());
+           });
+
+           w = btnWithdraw.getWidth() + 30.0;
+
+
+           final Node[] toShowOnExit = new Node[]{
+             //      field,
+                   accountLabel,
+                   btnNewAcct,
+                   comboBox,
+                   btnSubmit
+           };
+
+
+           btnNewAcct.setOnAction(e ->{
+               AddNewAccountDialog newAccDg = new AddNewAccountDialog();
+               newAccDg.newAccount(cashMachine);
+               updateAccountListSelector(options);
+               comboBox.getSelectionModel().selectFirst();
+           });
+
+
+           btnExit.setLayoutX(400);
+           btnExit.setLayoutY(330);
+
+           btnExit.setOnAction(e -> {
+               cashMachine.exit();
+
+
+
+               showAndHide(allControls,toShowOnExit);
+               updateAccountListSelector(options);
+               comboBox.getSelectionModel().selectFirst();
+
+
+               areaInfo.setText(cashMachine.toString());
+           });
+
+
+
+
+
+           final Node[] toShowOnLogin = new Node[]{
+                   btnDeposit,
+                   btnWithdraw,
+                   btnExit,
+                   field,
+                   accountIdLabel1,
+                   accountTypeLabel1,
+                   clientNameLabel1,
+                   clientEmailLabel1,
+                   accountBalanceLabel1,
+                   accountIdLabel2,
+                   accountTypeLabel2,
+                   clientNameLabel2,
+                   clientEmailLabel2,
+                   accountBalanceLabel2
+           };
+
+          //accountBalanceLabel1.setText(areaInfo.getText());
+           btnSubmit.setOnAction(e -> {
+      //         int id = Integer.parseInt(field.getText());
+               int id = comboBox.getValue();
+               cashMachine.login(id);
+
+
+
+           //    areaInfo.setText(cashMachine.toString());
+
+
+                showAndHide(allControls,toShowOnLogin);
+
+
+               redrawAcctInfo(accountIdLabel2, accountTypeLabel2, clientNameLabel2, clientEmailLabel2, accountBalanceLabel2);
+
+
+           });
+
+
+
+
+            btnDeposit.setVisible(false);
+            btnWithdraw.setVisible(false);
+            btnExit.setVisible(false);
+
+
+
+           root.getChildren().addAll(accountIdLabel1, accountTypeLabel1, accountBalanceLabel1, clientNameLabel1, clientEmailLabel1);
+           root.getChildren().addAll(accountIdLabel2, accountTypeLabel2, accountBalanceLabel2, clientNameLabel2, clientEmailLabel2);
+           root.getChildren().addAll(accountLabel, field, btnSubmit, areaInfo);
+           root.getChildren().addAll(btnDeposit, btnWithdraw, btnExit, btnNewAcct, comboBox);
+
+
+        Scene scene = new Scene(root, 500, 400, Color.WHITESMOKE);
+
+            stage.setTitle("Welcome to ZipCloudBank");
+            stage.setScene(scene);
+            stage.show();
+
+        return root;
+
+
+
+
+
+
+
+    }
+
+    private double getAmount(TextArea areaInfo, double amount) {
+        try {
+            amount = Double.parseDouble(field.getText());
+        } catch (NumberFormatException nfeWithdraw) {areaInfo.setText("Please enter a valid amount.");}
+        return amount;
+    }
+
+    private void redrawAcctInfo(Label accountIdLabel2, Label accountTypeLabel2, Label clientNameLabel2, Label clientEmailLabel2, Label accountBalanceLabel2) {
+        String parts = cashMachine.toDataString();
+
+        Integer i1 = parts.indexOf("(01)");
+        Integer i2 = parts.indexOf("(02)");
+        Integer i3 = parts.indexOf("(03)");
+        Integer i4 = parts.indexOf("(04)");
+        Integer i5 = parts.indexOf("(05)");
+        Integer i6 = parts.indexOf("(06)");
+
+        Double balance=0.0;
+
+        try {
+            balance = Double.parseDouble(parts.substring(i4 + 4, i5));
+        } catch (NumberFormatException e) {
+
+        }
+
+        accountIdLabel2.setText(parts.substring(i1+4, i2));
+        clientNameLabel2.setText(parts.substring(i2+4, i3));
+        clientEmailLabel2.setText(parts.substring(i3+4, i4));
+        accountBalanceLabel2.setText(String.format("$%1.2f", balance));
+        accountTypeLabel2.setText(parts.substring(i5+4, i6));
+    }
+
+    public void showAndHide(Node[] toHide, Node[] toShow) {
+
+        for (Node node : toHide) {
+            node.setVisible(false);
+        }
+
+        for (Node node : toShow) {
+            node.setVisible(true);
+        }
+        field.setText("");
+    }
+
+
+
+
+
+
 }
