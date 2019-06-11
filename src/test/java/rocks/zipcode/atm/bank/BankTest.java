@@ -19,6 +19,12 @@ public class BankTest {
 
     @Test
     public void addNewAccount() {
+        Bank bank=new Bank();
+        Integer expectedId = 1500;
+        Integer[] expected = {1000,1800,2000,2100,2500};
+        Integer[] actual = bank.getAccountIdList();
+
+        Assert.assertArrayEquals(expected,actual);
     }
 
     @Test
